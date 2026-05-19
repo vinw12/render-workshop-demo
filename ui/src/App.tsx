@@ -207,6 +207,14 @@ export default function App() {
               height={28}
             />
           </a>
+          <a
+            href={renderSignupUrlWithUtms('hero_cta')}
+            className="dds-btn-ghost text-sm"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Sign up on Render
+          </a>
         </div>
 
         <section className="mb-10">

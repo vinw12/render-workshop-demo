@@ -4,7 +4,27 @@ Ticker research with parallel web search and LLM synthesis. Built for the Cascad
 
 ## What it does
 
-Enter a stock ticker. The app runs four Exa web searches in parallel, then asks Claude to write a structured research memo from the results. Version 1 is intentionally flaky: each search has a 30% random failure rate so workshop attendees can see what breaks before adding Render Workflows.
+Enter a stock ticker. The app runs four Exa web searches in parallel, then asks Claude to write a structured research memo from the results. Version 1 is intentionally flaky: each search has a 30% random failure rate so the workshop can show what breaks before adding Render Workflows.
+
+## Deploy on Render
+
+This app is meant to run on [Render](https://render.com/). Local setup is optional (see [Developing](#developing) below).
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/ojusave/workshop-demo)
+
+1. Click **Deploy to Render** (or apply the [`render.yaml`](render.yaml) Blueprint from the repo).
+2. In the Dashboard, set environment variables:
+
+| Variable | Required in v1 |
+|----------|----------------|
+| `ANTHROPIC_API_KEY` | Yes |
+| `EXA_API_KEY` | Yes |
+| `RENDER_API_KEY` | Reserved for v2 |
+
+3. Wait for the deploy to finish. Open your service URL (for example `https://ticker-research.onrender.com`).
+4. Enter a ticker and run a research pass. Most v1 runs fail on purpose; that is expected until v2.
+
+Health check: `GET /healthz` returns `ok`.
 
 ## Architecture
 
@@ -13,29 +33,6 @@ Enter a stock ticker. The app runs four Exa web searches in parallel, then asks 
 ![Pipeline flow](static/images/pipeline-flow.png)
 
 TODO: add `static/images/architecture-diagram.png` and `static/images/pipeline-flow.png`.
-
-## Deploy
-
-[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/ojusave/workshop-demo)
-
-Infrastructure is defined in [`render.yaml`](render.yaml). Set these environment variables in the Render Dashboard:
-
-| Variable | Required in v1 |
-|----------|----------------|
-| `ANTHROPIC_API_KEY` | Yes |
-| `EXA_API_KEY` | Yes |
-| `RENDER_API_KEY` | Reserved for v2 |
-
-## Run locally
-
-```bash
-npm install
-cp .env.example .env
-# Add ANTHROPIC_API_KEY and EXA_API_KEY
-npm run dev
-```
-
-Open the UI at `http://localhost:5173`. The API listens on port 3000.
 
 ## The failure is intentional
 
@@ -49,6 +46,20 @@ Open the UI at `http://localhost:5173`. The API listens on port 3000.
 | `tasks/src/` | Search, synthesis, and orchestration (becomes Workflow tasks in v2) |
 | `ui/src/` | React UI |
 | `shared/types.ts` | Shared event and data types |
+
+## Developing
+
+Use this only if you are changing code before deploy: workshop prep, or contributing.
+
+```bash
+git clone https://github.com/ojusave/workshop-demo.git
+cd workshop-demo
+npm install
+cp .env.example .env   # ANTHROPIC_API_KEY and EXA_API_KEY
+npm run dev
+```
+
+UI: `http://localhost:5173` (proxies `/api` to the server on port 3000).
 
 ## Not investment advice
 
